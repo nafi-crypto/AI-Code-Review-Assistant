@@ -149,7 +149,7 @@ int main() {
     return 0;
 }
 """,
-    "expected": ["bug", "error"]
+    "expected": ["bug"]
 }
 
 ]

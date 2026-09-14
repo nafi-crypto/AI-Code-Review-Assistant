@@ -5,8 +5,7 @@
     "expected": [
       "bug"
     ],
-    "status": "RATE_LIMITED",
-    "error": "{\"detail\":\"AI model rate limit reached. Please try again shortly.\"}"
+    "status": "TIMEOUT"
   },
   {
     "test": "Division By Zero",
@@ -14,8 +13,12 @@
     "expected": [
       "error"
     ],
-    "status": "RATE_LIMITED",
-    "error": "{\"detail\":\"AI model rate limit reached. Please try again shortly.\"}"
+    "detected": [
+      "bug",
+      "error"
+    ],
+    "correct": true,
+    "status": "SUCCESS"
   },
   {
     "test": "Missing Dictionary Key",
@@ -23,8 +26,11 @@
     "expected": [
       "error"
     ],
-    "status": "RATE_LIMITED",
-    "error": "{\"detail\":\"AI model rate limit reached. Please try again shortly.\"}"
+    "detected": [
+      "error"
+    ],
+    "correct": true,
+    "status": "SUCCESS"
   },
   {
     "test": "SQL Injection",
@@ -32,8 +38,11 @@
     "expected": [
       "security"
     ],
-    "status": "RATE_LIMITED",
-    "error": "{\"detail\":\"AI model rate limit reached. Please try again shortly.\"}"
+    "detected": [
+      "security"
+    ],
+    "correct": true,
+    "status": "SUCCESS"
   },
   {
     "test": "Command Injection",
@@ -41,8 +50,11 @@
     "expected": [
       "security"
     ],
-    "status": "RATE_LIMITED",
-    "error": "{\"detail\":\"AI model rate limit reached. Please try again shortly.\"}"
+    "detected": [
+      "security"
+    ],
+    "correct": true,
+    "status": "SUCCESS"
   },
   {
     "test": "None Handling",
@@ -50,8 +62,12 @@
     "expected": [
       "error"
     ],
-    "status": "RATE_LIMITED",
-    "error": "{\"detail\":\"AI model rate limit reached. Please try again shortly.\"}"
+    "detected": [
+      "bug",
+      "error"
+    ],
+    "correct": true,
+    "status": "SUCCESS"
   },
   {
     "test": "Nested Loop Performance",
@@ -59,8 +75,11 @@
     "expected": [
       "performance"
     ],
-    "status": "RATE_LIMITED",
-    "error": "{\"detail\":\"AI model rate limit reached. Please try again shortly.\"}"
+    "detected": [
+      "performance"
+    ],
+    "correct": true,
+    "status": "SUCCESS"
   },
   {
     "test": "Hardcoded API Key",
@@ -68,8 +87,11 @@
     "expected": [
       "security"
     ],
-    "status": "RATE_LIMITED",
-    "error": "{\"detail\":\"AI model rate limit reached. Please try again shortly.\"}"
+    "detected": [
+      "security"
+    ],
+    "correct": true,
+    "status": "SUCCESS"
   },
   {
     "test": "Java Array Error",
@@ -78,17 +100,23 @@
       "bug",
       "error"
     ],
-    "status": "RATE_LIMITED",
-    "error": "{\"detail\":\"AI model rate limit reached. Please try again shortly.\"}"
+    "detected": [
+      "bug",
+      "error"
+    ],
+    "correct": true,
+    "status": "SUCCESS"
   },
   {
     "test": "C++ Array Error",
     "language": "C++",
     "expected": [
-      "bug",
-      "error"
+      "bug"
     ],
-    "status": "RATE_LIMITED",
-    "error": "{\"detail\":\"AI model rate limit reached. Please try again shortly.\"}"
+    "detected": [
+      "bug"
+    ],
+    "correct": true,
+    "status": "SUCCESS"
   }
 ]

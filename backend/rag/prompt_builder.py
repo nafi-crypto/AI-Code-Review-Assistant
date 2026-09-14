@@ -1025,6 +1025,46 @@ Do not manufacture bugs.
 Do not classify security-only, performance-only or
 style-only issues as bugs.
 
+JAVA ARRAY BOUNDS:
+
+For Java arrays, accessing an index outside the valid array range
+is a confirmed runtime error.
+
+Example:
+int[] numbers = {10, 20, 30};
+System.out.println(numbers[5]);
+
+Classify this as:
+- BUG: confirmed functional defect
+- ERROR: runtime exception
+
+The error finding MUST include:
+type, title, file, line, line_range, evidence,
+description, impact, fix, confidence.
+
+For this example, the fix should explain that the index
+must remain within 0 to length - 1.
+
+
+NONE / NULL HANDLING:
+
+If the source code directly dereferences, indexes, accesses,
+or calls a value that is explicitly None/null and this can cause
+a runtime exception, classify it as an ERROR.
+
+Examples:
+- Python: user = None; user["name"] -> TypeError
+- Python: user = None; user.name -> AttributeError
+- Java: object = null; object.method() -> NullPointerException
+- C/C++: direct invalid null pointer dereference -> runtime/undefined behavior
+  only when directly supported by the supplied code.
+
+Do NOT classify ordinary None/null handling as a SECURITY issue
+unless there is direct evidence of a security vulnerability.
+
+A null/None dereference that causes program execution failure
+belongs under errors, not security.
+
 If no supported bug exists:
 
 "bugs": []
@@ -2933,6 +2973,47 @@ resulting time complexity carefully.
 
 For example, two nested loops over n elements
 normally indicate O(n²) time complexity.
+
+TOP-LEVEL OUTPUT REQUIREMENTS:
+
+The final JSON object MUST contain ALL of these properties:
+
+project
+question
+user_requirements
+review_types
+answer_summary
+files_analyzed
+key_methods
+key_classes
+libraries
+bugs
+errors
+performance
+security
+code_quality
+corrected_code
+expected_output
+score
+confidence
+final_verdict
+
+NEVER omit any top-level property.
+
+If no corrected code is necessary:
+corrected_code = []
+
+If no expected output can be determined:
+expected_output = null
+
+If a numeric score cannot be reliably determined:
+score = null
+
+confidence MUST be an integer from 0 to 100.
+
+final_verdict MUST always contain a concise final conclusion.
+
+These properties are mandatory even when their values are empty or null.
 
 CODE QUALITY:
 The code_quality object MUST contain only:
