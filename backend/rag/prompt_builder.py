@@ -1044,7 +1044,7 @@ description, impact, fix, confidence.
 
 For this example, the fix should explain that the index
 must remain within 0 to length - 1.
-
++0
 
 NONE / NULL HANDLING:
 

@@ -1,20 +1,41 @@
 {
-    "project_name": "pasted_code",
-    "total_files": 1,
-    "total_lines": 10,
+    "project_name": "accuracytest.1",
+    "total_files": 4,
+    "total_lines": 55,
     "languages": {
-        "C++": {
-            "files": 1,
-            "lines": 10
+        "Python": {
+            "files": 4,
+            "lines": 55
         }
     },
     "files": [
         {
-            "name": "benchmark_10.cpp",
-            "path": "benchmark_10.cpp",
-            "extension": ".cpp",
-            "language": "C++",
-            "lines": 10
+            "name": "calculator.py",
+            "path": "calculator.py",
+            "extension": ".py",
+            "language": "Python",
+            "lines": 12
+        },
+        {
+            "name": "database.py",
+            "path": "database.py",
+            "extension": ".py",
+            "language": "Python",
+            "lines": 7
+        },
+        {
+            "name": "main.py",
+            "path": "main.py",
+            "extension": ".py",
+            "language": "Python",
+            "lines": 23
+        },
+        {
+            "name": "security.py",
+            "path": "security.py",
+            "extension": ".py",
+            "language": "Python",
+            "lines": 13
         }
     ]
 }
