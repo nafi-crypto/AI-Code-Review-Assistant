@@ -1,41 +1,20 @@
 {
-    "project_name": "accuracytest.1",
-    "total_files": 4,
-    "total_lines": 55,
+    "project_name": "c-test1",
+    "total_files": 1,
+    "total_lines": 29,
     "languages": {
-        "Python": {
-            "files": 4,
-            "lines": 55
+        "C++": {
+            "files": 1,
+            "lines": 29
         }
     },
     "files": [
         {
-            "name": "calculator.py",
-            "path": "calculator.py",
-            "extension": ".py",
-            "language": "Python",
-            "lines": 12
-        },
-        {
-            "name": "database.py",
-            "path": "database.py",
-            "extension": ".py",
-            "language": "Python",
-            "lines": 7
-        },
-        {
-            "name": "main.py",
-            "path": "main.py",
-            "extension": ".py",
-            "language": "Python",
-            "lines": 23
-        },
-        {
-            "name": "security.py",
-            "path": "security.py",
-            "extension": ".py",
-            "language": "Python",
-            "lines": 13
+            "name": "cplustest1.cpp",
+            "path": "cplustest1.cpp",
+            "extension": ".cpp",
+            "language": "C++",
+            "lines": 29
         }
     ]
 }

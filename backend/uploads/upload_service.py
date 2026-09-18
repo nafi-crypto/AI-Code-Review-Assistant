@@ -5,9 +5,7 @@ from fastapi import UploadFile
 from .zip_handler import ZipHandler
 from .file_handler import FileHandler
 from .paste_handler import PasteHandler
-from .pdf_handler import PdfHandler
 from .github_handler import GithubHandler
-from .docx_handler import DocxHandler
 
 
 class UploadService:
@@ -18,39 +16,44 @@ class UploadService:
         extract_dir,
         rag_pipeline
     ):
+        # ========================================================
         # ZIP Handler
+        # ========================================================
+
         self.zip_handler = ZipHandler(
             upload_dir,
             extract_dir
         )
 
+        # ========================================================
         # Multiple Files Handler
+        # ========================================================
+
         self.file_handler = FileHandler(
             upload_dir
         )
 
+        # ========================================================
         # Paste Code Handler
+        # ========================================================
+
         self.paste_handler = PasteHandler(
             upload_dir
         )
 
-        # PDF Handler
-        self.pdf_handler = PdfHandler(
-            upload_dir
-        )
-
+        # ========================================================
         # GitHub Handler
+        # ========================================================
+
         self.github_handler = GithubHandler(
             upload_dir,
             extract_dir
         )
 
-        # Document Handler
-        self.docx_handler = DocxHandler(
-            upload_dir
-        )
-
+        # ========================================================
         # Shared RAG Pipeline
+        # ========================================================
+
         self.rag_pipeline = rag_pipeline
 
     # ============================================================
@@ -61,7 +64,6 @@ class UploadService:
         self,
         file: UploadFile
     ):
-
         upload_result = await (
             self.zip_handler.extract_project(
                 file
@@ -84,11 +86,13 @@ class UploadService:
         if metadata:
 
             file_count = metadata.get(
-                "total_files", 0
+                "total_files",
+                0
             )
 
             lang_data = metadata.get(
-                "languages", {}
+                "languages",
+                {}
             )
 
             if isinstance(lang_data, dict):
@@ -119,7 +123,6 @@ class UploadService:
         self,
         files: List[UploadFile]
     ):
-
         upload_result = await (
             self.file_handler.save_files(
                 files
@@ -136,7 +139,8 @@ class UploadService:
         )
 
         saved_files = upload_result.get(
-            "saved_files", []
+            "saved_files",
+            []
         )
 
         # Build summary from metadata
@@ -145,7 +149,8 @@ class UploadService:
         if metadata:
 
             lang_data = metadata.get(
-                "languages", {}
+                "languages",
+                {}
             )
 
             if isinstance(lang_data, dict):
@@ -175,7 +180,6 @@ class UploadService:
         code: str,
         filename: str
     ):
-
         upload_result = (
             self.paste_handler.save_code(
                 code,
@@ -206,46 +210,6 @@ class UploadService:
         }
 
     # ============================================================
-    # PDF Upload
-    # ============================================================
-
-    async def process_pdf_upload(
-        self,
-        file: UploadFile
-    ):
-
-        upload_result = await (
-            self.pdf_handler.extract_code(
-                file
-            )
-        )
-
-        metadata = (
-            self.rag_pipeline
-            .build_vector_database(
-                str(
-                    upload_result["project_folder"]
-                )
-            )
-        )
-
-        return {
-            "success": True,
-            "message": (
-                f"PDF processed successfully. "
-                f"Extracted {upload_result['char_count']} "
-                f"characters from "
-                f"{upload_result['page_count']} pages."
-            ),
-            "project_name": "pdf_project",
-            "file": upload_result["file_name"],
-            "page_count": (
-                upload_result["page_count"]
-            ),
-            "metadata": metadata
-        }
-
-    # ============================================================
     # GitHub Repository
     # ============================================================
 
@@ -253,7 +217,6 @@ class UploadService:
         self,
         repo_url: str
     ):
-
         upload_result = await (
             self.github_handler.clone_repo(
                 repo_url
@@ -276,11 +239,13 @@ class UploadService:
         if metadata:
 
             file_count = metadata.get(
-                "total_files", 0
+                "total_files",
+                0
             )
 
             lang_data = metadata.get(
-                "languages", {}
+                "languages",
+                {}
             )
 
             if isinstance(lang_data, dict):
@@ -303,42 +268,5 @@ class UploadService:
             "branch": upload_result["branch"],
             "file_count": file_count,
             "languages": languages,
-            "metadata": metadata
-        }
-
-    # ============================================================
-    # Document Upload
-    # ============================================================
-
-    async def process_document_upload(
-        self,
-        file: UploadFile
-    ):
-
-        upload_result = await (
-            self.docx_handler.extract_code(
-                file
-            )
-        )
-
-        metadata = (
-            self.rag_pipeline
-            .build_vector_database(
-                str(
-                    upload_result["project_folder"]
-                )
-            )
-        )
-
-        return {
-            "success": True,
-            "message": (
-                f"Document processed successfully. "
-                f"Extracted "
-                f"{upload_result['char_count']} "
-                f"characters."
-            ),
-            "project_name": "doc_project",
-            "file": upload_result["file_name"],
             "metadata": metadata
         }
