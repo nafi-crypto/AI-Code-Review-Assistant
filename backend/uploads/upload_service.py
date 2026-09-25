@@ -73,7 +73,9 @@ class UploadService:
             .build_vector_database(
                 str(
                     upload_result["project_folder"]
-                )
+                ),
+                input_type="zip",
+                original_filename=file.filename
             )
         )
 
@@ -126,12 +128,15 @@ class UploadService:
             )
         )
 
+        is_single = len(files) == 1
         metadata = (
             self.rag_pipeline
             .build_vector_database(
                 str(
                     upload_result["project_folder"]
-                )
+                ),
+                input_type="source_file" if is_single else "source_files",
+                original_filename=files[0].filename if is_single else "source_files.zip"
             )
         )
 
@@ -163,6 +168,8 @@ class UploadService:
             "file_count": len(saved_files),
             "files": saved_files,
             "languages": languages,
+            "input_type": "source_file" if is_single else "source_files",
+            "original_filename": files[0].filename if is_single else "source_files.zip",
             "metadata": metadata
         }
 
@@ -188,7 +195,9 @@ class UploadService:
             .build_vector_database(
                 str(
                     upload_result["project_folder"]
-                )
+                ),
+                input_type="pasted_code",
+                original_filename=filename
             )
         )
 
@@ -202,6 +211,8 @@ class UploadService:
             "file": (
                 upload_result["file_name"]
             ),
+            "input_type": "pasted_code",
+            "original_filename": filename,
             "metadata": metadata
         }
 

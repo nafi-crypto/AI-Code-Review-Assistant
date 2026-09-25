@@ -1,0 +1,13 @@
+{
+  "name": "ai-code-review-assistant-root",
+  "version": "1.4.0",
+  "description": "AI Code Review Assistant - Unified Single Application",
+  "scripts": {
+    "build:frontend": "cd frontend && npm install && npm run build",
+    "build": "npm run build:frontend",
+    "start:backend": "cd backend && uvicorn app:app --host 0.0.0.0 --port 8000",
+    "start": "npm run build && npm run start:backend",
+    "dev": "python run.py"
+  },
+  "private": true
+}

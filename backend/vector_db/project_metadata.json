@@ -1,41 +1,23 @@
 {
-    "project_name": "accuracytest.1",
-    "total_files": 4,
-    "total_lines": 55,
+    "project_name": "temp_project",
+    "total_files": 1,
+    "total_lines": 53,
     "languages": {
         "Python": {
-            "files": 4,
-            "lines": 55
+            "files": 1,
+            "lines": 53
         }
     },
     "files": [
         {
-            "name": "calculator.py",
-            "path": "calculator.py",
+            "name": "test1.py",
+            "path": "test1.py",
             "extension": ".py",
             "language": "Python",
-            "lines": 12
-        },
-        {
-            "name": "database.py",
-            "path": "database.py",
-            "extension": ".py",
-            "language": "Python",
-            "lines": 7
-        },
-        {
-            "name": "main.py",
-            "path": "main.py",
-            "extension": ".py",
-            "language": "Python",
-            "lines": 23
-        },
-        {
-            "name": "security.py",
-            "path": "security.py",
-            "extension": ".py",
-            "language": "Python",
-            "lines": 13
+            "lines": 53
         }
-    ]
+    ],
+    "project_path": "uploads\\temp_project",
+    "input_type": "source_file",
+    "original_filename": "test1.py"
 }

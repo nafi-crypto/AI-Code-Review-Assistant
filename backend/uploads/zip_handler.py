@@ -7,14 +7,10 @@ from fastapi import HTTPException, UploadFile
 
 class ZipHandler:
 
-    # Maximum ZIP file size: 50 MB
-    MAX_ZIP_SIZE = 50 * 1024 * 1024
-
-    # Maximum number of files inside the ZIP
-    MAX_FILE_COUNT = 500
-
-    # Maximum total extracted size: 200 MB
-    MAX_EXTRACTED_SIZE = 200 * 1024 * 1024
+    # No limits on ZIP size, file count, or extracted size
+    MAX_ZIP_SIZE = None
+    MAX_FILE_COUNT = None
+    MAX_EXTRACTED_SIZE = None
 
     def __init__(
         self,
@@ -46,7 +42,7 @@ class ZipHandler:
         zip_path = self.upload_dir / safe_filename
 
         # ========================================================
-        # Save uploaded file with size check
+        # Save uploaded file (stream in chunks)
         # ========================================================
 
         total_bytes = 0
@@ -64,7 +60,7 @@ class ZipHandler:
 
                 total_bytes += len(chunk)
 
-                if total_bytes > self.MAX_ZIP_SIZE:
+                if self.MAX_ZIP_SIZE is not None and total_bytes > self.MAX_ZIP_SIZE:
 
                     buffer.close()
 
@@ -75,8 +71,7 @@ class ZipHandler:
                     raise HTTPException(
                         status_code=400,
                         detail=(
-                            "ZIP file is too large. "
-                            "Maximum size is 50 MB."
+                            "ZIP file is too large."
                         )
                     )
 
@@ -101,7 +96,7 @@ class ZipHandler:
             )
 
         # ========================================================
-        # Check for ZIP bombs
+        # Check archive integrity & limits
         # ========================================================
 
         try:
@@ -112,7 +107,7 @@ class ZipHandler:
 
                 members = zip_ref.infolist()
 
-                if len(members) > self.MAX_FILE_COUNT:
+                if self.MAX_FILE_COUNT is not None and len(members) > self.MAX_FILE_COUNT:
 
                     zip_path.unlink(
                         missing_ok=True
@@ -127,24 +122,24 @@ class ZipHandler:
                         )
                     )
 
-                total_uncompressed = sum(
-                    m.file_size for m in members
-                )
-
-                if total_uncompressed > self.MAX_EXTRACTED_SIZE:
-
-                    zip_path.unlink(
-                        missing_ok=True
+                if self.MAX_EXTRACTED_SIZE is not None:
+                    total_uncompressed = sum(
+                        m.file_size for m in members
                     )
 
-                    raise HTTPException(
-                        status_code=400,
-                        detail=(
-                            "ZIP contents are too large "
-                            "when extracted. "
-                            "Maximum extracted size is 200 MB."
+                    if total_uncompressed > self.MAX_EXTRACTED_SIZE:
+
+                        zip_path.unlink(
+                            missing_ok=True
                         )
-                    )
+
+                        raise HTTPException(
+                            status_code=400,
+                            detail=(
+                                "ZIP contents are too large "
+                                "when extracted."
+                            )
+                        )
 
         except zipfile.BadZipFile:
 
@@ -192,7 +187,6 @@ class ZipHandler:
 
             for member in zip_ref.infolist():
 
-                # Skip directories
                 if member.is_dir():
                     continue
 
@@ -201,7 +195,6 @@ class ZipHandler:
                     member.filename
                 ).resolve()
 
-                # Path traversal protection
                 try:
 
                     target_path.relative_to(
@@ -210,7 +203,6 @@ class ZipHandler:
 
                 except ValueError:
 
-                    # Clean up and reject
                     shutil.rmtree(
                         project_folder,
                         ignore_errors=True
@@ -236,7 +228,9 @@ class ZipHandler:
         # Clean up ZIP file
         # ========================================================
 
-        zip_path.unlink(missing_ok=True)
+        zip_path.unlink(
+            missing_ok=True
+        )
 
         print(
             f"\nZIP extracted: {project_name}"

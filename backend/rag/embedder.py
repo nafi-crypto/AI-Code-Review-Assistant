@@ -10,7 +10,10 @@ class CodeEmbedder:
         Initialize the embedding model.
         """
         print("Loading embedding model...")
-        self.model = SentenceTransformer(model_name,local_files_only=True)
+        try:
+            self.model = SentenceTransformer(model_name, local_files_only=True)
+        except Exception:
+            self.model = SentenceTransformer(model_name, local_files_only=False)
         print("Embedding model loaded successfully.")
 
     def embed_chunks(self, chunks: List[Dict]) -> List[Dict]:

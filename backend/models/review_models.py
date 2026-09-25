@@ -18,6 +18,8 @@ class ReviewRequest(BaseModel):
         max_length=2000
     )
 
+    model: Optional[str] = None
+
 
 # ============================================================
 # PASTE CODE REQUEST
@@ -98,22 +100,35 @@ class BugFinding(BaseModel):
         "possible_risk"
     ]
 
-    severity: Literal["critical", "high", "medium", "low"]
-    file: str
+    severity: Literal["critical", "high", "medium", "low"] = "high"
+    file: str = "main.py"
 
     line: Optional[int] = None
 
     line_range: Optional[str] = None
 
-    evidence: str
+    evidence: str = ""
 
-    description: str
+    description: str = ""
 
-    impact: str
+    explanation: Optional[str] = None
 
-    fix: str
+    impact: str = ""
+
+    fix: str = ""
+
+    suggested_solution: Optional[str] = None
+
+    before_code: Optional[str] = None
+
+    after_code: Optional[str] = None
+
+    corrected_code: Optional[str] = None
+
+    reason_for_correction: Optional[str] = None
 
     confidence: int = Field(
+        default=85,
         ge=0,
         le=100
     )
@@ -125,25 +140,40 @@ class BugFinding(BaseModel):
 
 class ErrorFinding(BaseModel):
 
-    type: str
+    type: str = "runtime_error"
 
-    title: str
+    title: str = "Detected Error"
 
-    file: str
+    file: str = "main.py"
 
-    line: Optional[int]
+    line: Optional[int] = None
 
-    line_range: Optional[str]
+    line_range: Optional[str] = None
 
-    evidence: str
+    evidence: str = ""
 
-    description: str
+    description: str = ""
 
-    impact: str
+    explanation: Optional[str] = None
 
-    fix: str
+    severity: Literal["critical", "high", "medium", "low"] = "high"
+
+    impact: str = ""
+
+    fix: str = ""
+
+    suggested_solution: Optional[str] = None
+
+    before_code: Optional[str] = None
+
+    after_code: Optional[str] = None
+
+    corrected_code: Optional[str] = None
+
+    reason_for_correction: Optional[str] = None
 
     confidence: int = Field(
+        default=85,
         ge=0,
         le=100
     )
@@ -155,9 +185,11 @@ class ErrorFinding(BaseModel):
 
 class PerformanceIssue(BaseModel):
 
-    title: str
+    title: str = "Performance Concern"
 
-    description: str
+    description: str = ""
+
+    explanation: Optional[str] = None
 
     file: Optional[str] = None
 
@@ -165,11 +197,23 @@ class PerformanceIssue(BaseModel):
 
     line_range: Optional[str] = None
 
+    severity: Literal["critical", "high", "medium", "low"] = "medium"
+
     evidence: Optional[str] = None
 
     impact: Optional[str] = None
 
     suggestion: Optional[str] = None
+
+    suggested_solution: Optional[str] = None
+
+    before_code: Optional[str] = None
+
+    after_code: Optional[str] = None
+
+    corrected_code: Optional[str] = None
+
+    reason_for_correction: Optional[str] = None
 
     confidence: Optional[int] = Field(default=None, ge=0, le=100)
 
@@ -192,9 +236,11 @@ class PerformanceInfo(BaseModel):
 
 class SecurityFinding(BaseModel):
 
-    title: str
+    title: str = "Security Finding"
 
-    description: str
+    description: str = ""
+
+    explanation: Optional[str] = None
 
     file: Optional[str] = None
 
@@ -208,12 +254,22 @@ class SecurityFinding(BaseModel):
 
     suggestion: Optional[str] = None
 
+    suggested_solution: Optional[str] = None
+
     severity: Literal[
         "critical",
         "high",
         "medium",
         "low"
     ] = "medium"
+
+    before_code: Optional[str] = None
+
+    after_code: Optional[str] = None
+
+    corrected_code: Optional[str] = None
+
+    reason_for_correction: Optional[str] = None
 
     confidence: int = Field(
         default=80,
@@ -246,9 +302,11 @@ class SecurityInfo(BaseModel):
 
 class CodeQualityFinding(BaseModel):
 
-    title: str
+    title: str = "Code Quality Finding"
 
-    description: str
+    description: str = ""
+
+    explanation: Optional[str] = None
 
     file: Optional[str] = None
 
@@ -256,11 +314,28 @@ class CodeQualityFinding(BaseModel):
 
     line_range: Optional[str] = None
 
+    severity: Literal[
+        "critical",
+        "high",
+        "medium",
+        "low"
+    ] = "low"
+
     evidence: Optional[str] = None
 
     impact: Optional[str] = None
 
     suggestion: Optional[str] = None
+
+    suggested_solution: Optional[str] = None
+
+    before_code: Optional[str] = None
+
+    after_code: Optional[str] = None
+
+    corrected_code: Optional[str] = None
+
+    reason_for_correction: Optional[str] = None
 
     confidence: Optional[int] = Field(
         default=None,
@@ -289,6 +364,43 @@ class CodeQualityInfo(BaseModel):
 
 
 # ============================================================
+# UNIFIED DETECTED ISSUE (8-POINT SOLUTION MODEL)
+# ============================================================
+
+class DetectedIssue(BaseModel):
+
+    title: str
+
+    category: str
+
+    file: str
+
+    line: Optional[int] = None
+
+    line_range: Optional[str] = None
+
+    description: str
+
+    explanation: Optional[str] = None
+
+    severity: Literal["critical", "high", "medium", "low"] = "medium"
+
+    suggested_solution: Optional[str] = None
+
+    before_code: Optional[str] = None
+
+    after_code: Optional[str] = None
+
+    corrected_code: Optional[str] = None
+
+    reason_for_correction: Optional[str] = None
+
+    impact: Optional[str] = None
+
+    confidence: Optional[int] = None
+
+
+# ============================================================
 # STRUCTURED REVIEW
 # ============================================================
 
@@ -299,6 +411,8 @@ class StructuredReview(BaseModel):
     # --------------------------------------------------------
 
     project: ProjectInfo
+
+    detected_issues: Optional[List[DetectedIssue]] = None
 
     # --------------------------------------------------------
     # USER REVIEW REQUEST

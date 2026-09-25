@@ -252,7 +252,9 @@ class RAGPipeline:
 
     def build_vector_database(
         self,
-        project_path: str
+        project_path: str,
+        input_type: Optional[str] = None,
+        original_filename: Optional[str] = None
     ):
 
         print(
@@ -351,6 +353,35 @@ class RAGPipeline:
                     {}
                 ).keys()
             )
+        )
+
+        if input_type is None:
+            proj_str = str(project_path).lower().replace("\\", "/")
+            if "pasted_code" in proj_str:
+                input_type = "pasted_code"
+            elif "temp_project" in proj_str or "uploaded_files" in proj_str:
+                input_type = "source_file"
+            else:
+                input_type = "zip"
+
+        self.project_metadata["project_path"] = str(project_path)
+        self.project_metadata["input_type"] = input_type
+        if original_filename:
+            self.project_metadata["original_filename"] = original_filename
+        elif "original_filename" not in self.project_metadata:
+            files_list = self.project_metadata.get("files", [])
+            if files_list and len(files_list) == 1:
+                self.project_metadata["original_filename"] = files_list[0].get("name", "source_code.txt")
+            else:
+                self.project_metadata["original_filename"] = f"{self.project_metadata.get('project_name', 'project')}.zip"
+
+        print(
+            "Input Type   :",
+            self.project_metadata.get("input_type")
+        )
+        print(
+            "Original File:",
+            self.project_metadata.get("original_filename")
         )
 
         # ========================================================
